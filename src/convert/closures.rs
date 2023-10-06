@@ -36,6 +36,7 @@ macro_rules! stack_closures {
             )*
         ) -> WasmRet<R::Abi> {
             if a == 0 {
+                unreachable!();
                 throw_str("closure invoked after being dropped");
             }
             // Scope all local variables before we call `return_abi` to
@@ -90,6 +91,7 @@ macro_rules! stack_closures {
             )*
         ) -> WasmRet<R::Abi> {
             if a == 0 {
+                unreachable!();
                 throw_str("closure invoked recursively or after being dropped");
             }
             // Scope all local variables before we call `return_abi` to
@@ -160,6 +162,7 @@ unsafe extern "C" fn invoke1_ref<A: RefFromWasmAbi, R: ReturnWasmAbi>(
     arg4: <A::Abi as WasmAbi>::Prim4,
 ) -> WasmRet<R::Abi> {
     if a == 0 {
+        unreachable!();
         throw_str("closure invoked after being dropped");
     }
     // Scope all local variables before we call `return_abi` to
@@ -215,6 +218,7 @@ unsafe extern "C" fn invoke1_mut_ref<A: RefFromWasmAbi, R: ReturnWasmAbi>(
     arg4: <A::Abi as WasmAbi>::Prim4,
 ) -> WasmRet<R::Abi> {
     if a == 0 {
+        unreachable!();
         throw_str("closure invoked recursively or after being dropped");
     }
     // Scope all local variables before we call `return_abi` to

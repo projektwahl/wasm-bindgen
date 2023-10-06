@@ -1182,6 +1182,7 @@ impl<T: FromWasmAbi + 'static> Deref for JsStatic<T> {
 #[deprecated(note = "renamed to `throw_str`")]
 #[doc(hidden)]
 pub fn throw(s: &str) -> ! {
+    unreachable!();
     throw_str(s)
 }
 
@@ -1198,6 +1199,7 @@ pub fn throw(s: &str) -> ! {
 #[cold]
 #[inline(never)]
 pub fn throw_str(s: &str) -> ! {
+    unreachable!();
     unsafe {
         __wbindgen_throw(s.as_ptr(), s.len());
     }
@@ -1216,6 +1218,7 @@ pub fn throw_str(s: &str) -> ! {
 #[cold]
 #[inline(never)]
 pub fn throw_val(s: JsValue) -> ! {
+    unreachable!();
     unsafe {
         let idx = s.idx;
         mem::forget(s);

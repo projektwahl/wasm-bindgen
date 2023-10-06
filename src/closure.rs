@@ -578,6 +578,7 @@ macro_rules! doit {
                     )*
                 ) -> WasmRet<R::Abi> {
                     if a == 0 {
+                        unreachable!();
                         throw_str("closure invoked after being dropped");
                     }
                     // Make sure all stack variables are converted before we
@@ -635,6 +636,7 @@ macro_rules! doit {
                     )*
                 ) -> WasmRet<R::Abi> {
                     if a == 0 {
+                        unreachable!();
                         throw_str("closure invoked recursively or after being dropped");
                     }
                     // Make sure all stack variables are converted before we
@@ -683,7 +685,7 @@ macro_rules! doit {
             fn into_fn_mut(self) -> Box<Self::FnMut> {
                 let mut me = Some(self);
                 Box::new(move |$($var),*| {
-                    let me = me.take().expect_throw("FnOnce called more than once");
+                    let me = me.take().unwrap();
                     me($($var),*)
                 })
             }
@@ -699,7 +701,7 @@ macro_rules! doit {
 
                 let closure = Closure::wrap(Box::new(move |$($var),*| {
                     // Invoke ourself and get the result.
-                    let me = me.take().expect_throw("FnOnce called more than once");
+                    let me = me.take().unwrap();
                     let result = me($($var),*);
 
                     // And then drop the `Rc` holding this function's `Closure`
@@ -774,6 +776,7 @@ where
             arg4: <A::Abi as WasmAbi>::Prim4,
         ) -> WasmRet<R::Abi> {
             if a == 0 {
+                unreachable!();
                 throw_str("closure invoked after being dropped");
             }
             // Make sure all stack variables are converted before we
