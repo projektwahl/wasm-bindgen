@@ -12,7 +12,6 @@ use std::prelude::v1::*;
 
 use crate::convert::*;
 use crate::describe::*;
-use crate::throw_str;
 use crate::JsValue;
 use crate::UnwrapThrowExt;
 
@@ -578,7 +577,7 @@ macro_rules! doit {
                     )*
                 ) -> WasmRet<R::Abi> {
                     if a == 0 {
-                        throw_str("closure invoked after being dropped");
+                        std::process::abort();
                     }
                     // Make sure all stack variables are converted before we
                     // convert `ret` as it may throw (for `Result`, for
@@ -635,7 +634,7 @@ macro_rules! doit {
                     )*
                 ) -> WasmRet<R::Abi> {
                     if a == 0 {
-                        throw_str("closure invoked recursively or after being dropped");
+                        std::process::abort();
                     }
                     // Make sure all stack variables are converted before we
                     // convert `ret` as it may throw (for `Result`, for
@@ -774,7 +773,7 @@ where
             arg4: <A::Abi as WasmAbi>::Prim4,
         ) -> WasmRet<R::Abi> {
             if a == 0 {
-                throw_str("closure invoked after being dropped");
+                std::process::abort();
             }
             // Make sure all stack variables are converted before we
             // convert `ret` as it may throw (for `Result`, for
@@ -820,7 +819,7 @@ where
             arg4: <A::Abi as WasmAbi>::Prim4,
         ) -> WasmRet<R::Abi> {
             if a == 0 {
-                throw_str("closure invoked recursively or after being dropped");
+                std::process::abort();
             }
             // Make sure all stack variables are converted before we
             // convert `ret` as it may throw (for `Result`, for

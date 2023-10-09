@@ -6,7 +6,6 @@ use crate::convert::slices::WasmSlice;
 use crate::convert::RefFromWasmAbi;
 use crate::convert::{FromWasmAbi, IntoWasmAbi, ReturnWasmAbi, WasmAbi, WasmRet};
 use crate::describe::{inform, WasmDescribe, FUNCTION};
-use crate::throw_str;
 
 macro_rules! stack_closures {
     ($( ($cnt:tt $invoke:ident $invoke_mut:ident $($var:ident $arg1:ident $arg2:ident $arg3:ident $arg4:ident)*) )*) => ($(
@@ -36,7 +35,7 @@ macro_rules! stack_closures {
             )*
         ) -> WasmRet<R::Abi> {
             if a == 0 {
-                throw_str("closure invoked after being dropped");
+                std::process::abort();
             }
             // Scope all local variables before we call `return_abi` to
             // ensure they're all destroyed as `return_abi` may throw
@@ -89,8 +88,9 @@ macro_rules! stack_closures {
             $arg4: <$var::Abi as WasmAbi>::Prim4,
             )*
         ) -> WasmRet<R::Abi> {
+            unreachable!();
             if a == 0 {
-                throw_str("closure invoked recursively or after being dropped");
+                std::process::abort();
             }
             // Scope all local variables before we call `return_abi` to
             // ensure they're all destroyed as `return_abi` may throw
@@ -160,7 +160,7 @@ unsafe extern "C" fn invoke1_ref<A: RefFromWasmAbi, R: ReturnWasmAbi>(
     arg4: <A::Abi as WasmAbi>::Prim4,
 ) -> WasmRet<R::Abi> {
     if a == 0 {
-        throw_str("closure invoked after being dropped");
+        std::process::abort();
     }
     // Scope all local variables before we call `return_abi` to
     // ensure they're all destroyed as `return_abi` may throw
@@ -215,7 +215,7 @@ unsafe extern "C" fn invoke1_mut_ref<A: RefFromWasmAbi, R: ReturnWasmAbi>(
     arg4: <A::Abi as WasmAbi>::Prim4,
 ) -> WasmRet<R::Abi> {
     if a == 0 {
-        throw_str("closure invoked recursively or after being dropped");
+        std::process::abort();
     }
     // Scope all local variables before we call `return_abi` to
     // ensure they're all destroyed as `return_abi` may throw
